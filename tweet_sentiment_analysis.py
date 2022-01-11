@@ -4,10 +4,7 @@ from textblob import TextBlob
 from textblob_fr import PatternTagger, PatternAnalyzer
 
 
-def main():
-    search_term = "Trump"
-    lang = "en"  # en ou fr
-
+def get_sentiment(search_term, lang):
     nb_tweets = 100
     nb_requests = 10
 
@@ -23,7 +20,7 @@ def main():
         nb_tweets = int(response["meta"]["result_count"])
         if (nb_tweets == 0):
             break
-        print("Request {} (Number of tweets: {})".format(j, nb_tweets))
+        #print("Request {} (Number of tweets: {})".format(j, nb_tweets))
 
         for i in range(0, nb_tweets):
             if (lang == "fr"):
@@ -36,7 +33,7 @@ def main():
             nb_sentiments_total += 1
 
     average = sentiment_total / nb_sentiments_total
-    print(average)
+    return average
 
 
 def get_headers():
@@ -53,6 +50,3 @@ def make_request(search_term, nb_tweets, lang, max_id):
     url = "https://api.twitter.com/2/tweets/search/recent?until_id={}&query={} -is:retweet lang:{}&max_results={}".format(str(max_id),
                                                                                                                           search_term, lang, nb_tweets)
     return requests.get(url, headers=get_headers()).json()
-
-
-main()
